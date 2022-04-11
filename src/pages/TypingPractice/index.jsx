@@ -13,11 +13,6 @@ const TypingPractice = () => {
   const [typed, setTyped] = useState("");
   const [timerInterval, setTimerInterval] = useState();
   useEffect(() => {
-    setTimerInterval(() =>
-      setInterval(() => {
-        setTime((time) => time + 1);
-      }, 1000)
-    );
     return () => clearInterval(timerInterval);
   }, []);
 
@@ -42,9 +37,18 @@ const TypingPractice = () => {
   }, [wrongCharIndex, typed]);
 
   useEffect(() => {
+    let start = false;
     let charCount = 0,
       wrongIndex = -1;
     window.addEventListener("keydown", (e) => {
+      if (!start) {
+        setTimerInterval(() =>
+          setInterval(() => {
+            setTime((time) => time + 1);
+          }, 1000)
+        );
+      }
+      start = true;
       if (
         ((e.keyCode >= 48 && e.keyCode <= 90) ||
           e.keyCode === 32 ||
