@@ -11,18 +11,20 @@ const TypingPractice = () => {
   const [start, setStart] = useState(false);
 
   const [paragraphs, setParagraphs] = useState(
-    "the at there some my of be use her than and this an would first a have each make water"
+    "The, at there  some my of be use her than and this an would first a have each make water"
   );
 
   const [typed, setTyped] = useState("");
+  const [timerInterval, setTimerInterval] = useState();
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(time + 1);
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
+    setTimerInterval(() =>
+      setInterval(() => {
+        setTime((time) => time + 1);
+      }, 1000)
+    );
+    return () => clearInterval(timerInterval);
   }, []);
+
   useEffect(() => {
     if (
       paragraphs[typed.length - 1] === " " ||
@@ -30,9 +32,11 @@ const TypingPractice = () => {
     ) {
       setWordCount(wordCount + 1);
     }
+    if (typed.length === paragraphs.length) {
+      clearInterval(timerInterval);
+    }
   }, [typed]);
   useEffect(() => {
-    console.log(wrongCharIndex);
     if (typed.length)
       setAccuracy(
         Math.floor(
@@ -45,16 +49,16 @@ const TypingPractice = () => {
     let charCount = 0,
       wrongIndex = -1;
     window.addEventListener("keydown", (e) => {
-      console.log(e.key, paragraphs[charCount]);
       if (
-        e.keyCode !== 13 &&
-        e.keyCode !== 8 &&
+        ((e.keyCode >= 48 && e.keyCode <= 90) ||
+          e.keyCode === 32 ||
+          (e.keyCode >= 186 && e.keyCode <= 222)) &&
         e.key === paragraphs[charCount]
       ) {
-        charCount++;
         setTyped((_typed) => _typed + e.key);
-      } else {
-        if (charCount !== wrongIndex)
+        charCount++;
+      } else if (e.keyCode !== 16 && e.keyCode !== 20) {
+        charCount !== wrongIndex &&
           setWrongCharIndex((_wrongCharIndex) => [
             ..._wrongCharIndex,
             charCount,
@@ -68,7 +72,7 @@ const TypingPractice = () => {
     <div>
       <TypingHeader
         accuracy={accuracy}
-        wpm={wpm}
+        wpm={Math.floor((wordCount / time) * 60)}
         incorrect={wrongCharIndex.length}
         time={time}
       />
@@ -83,6 +87,11 @@ const TypingPractice = () => {
                   ? "wrong-char"
                   : ""
               }
+              ${
+                i <= typed.length - 1 && !wrongCharIndex.includes(i)
+                  ? "correct-char"
+                  : ""
+              }
               ${typed.length === i ? "active-char" : ""}`}
             >
               {char}
@@ -90,23 +99,6 @@ const TypingPractice = () => {
           );
         })}
       </div>
-      {/* {wordCount}
-      <textarea
-        defaultValue={typed}
-        onKeyDown={(e) => {
-          setCurKey(e.key);
-        }}
-        onChange={(e) => {
-          console.log("curkey", curKey);
-          if (curKey !== "Backspace" || curKey !== "Delete") {
-            e.preventDefault();
-          }
-          if (!start) {
-            setStart(true);
-          }
-          setTyped(e.target.value);
-        }}
-      ></textarea> */}
     </div>
   );
 };
