@@ -72,7 +72,7 @@ const TypingPractice = () => {
     <div>
       <TypingHeader
         accuracy={accuracy}
-        wpm={Math.floor((wordCount / time) * 60)}
+        wpm={time === 0 ? 0 : Math.floor((wordCount / time) * 60)}
         incorrect={wrongCharIndex.length}
         time={time}
       />
