@@ -22,23 +22,8 @@ const TypingPractice = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [start]);
+  }, []);
   useEffect(() => {
-    // if (
-    //   typed.length > 0 &&
-    //   typed[typed.length - 1] !== paragraphs[typed.length - 1]
-    // ) {
-    //   setWrongCharIndex((_wrongCharIndex) => [
-    //     ..._wrongCharIndex,
-    //     typed.length - 1,
-    //   ]);
-    // }
-    // if (typed.length === 0) setWrongCharIndex([]);
-    // if (typed.length >= 0 && wrongCharIndex.includes(typed.length - 1)) {
-    //   setWrongCharIndex((_wrongCharIndex) =>
-    //     _wrongCharIndex.filter((index) => index !== typed.length - 1)
-    //   );
-    // }
     if (
       paragraphs[typed.length - 1] === " " ||
       typed.length - 1 === paragraphs.length - 1
@@ -58,21 +43,23 @@ const TypingPractice = () => {
 
   useEffect(() => {
     let charCount = 0,
-      wrongIndex = 0;
+      wrongIndex = -1;
     window.addEventListener("keydown", (e) => {
       console.log(e.key, paragraphs[charCount]);
-      if (e.keyCode !== 13 && e.keyCode !== 8) {
-        if (e.key !== paragraphs[charCount]) {
-          if (charCount !== wrongIndex)
-            setWrongCharIndex((_wrongCharIndex) => [
-              ..._wrongCharIndex,
-              charCount,
-            ]);
-          wrongIndex = charCount;
-        } else {
-          charCount++;
-          setTyped((_typed) => _typed + e.key);
-        }
+      if (
+        e.keyCode !== 13 &&
+        e.keyCode !== 8 &&
+        e.key === paragraphs[charCount]
+      ) {
+        charCount++;
+        setTyped((_typed) => _typed + e.key);
+      } else {
+        if (charCount !== wrongIndex)
+          setWrongCharIndex((_wrongCharIndex) => [
+            ..._wrongCharIndex,
+            charCount,
+          ]);
+        wrongIndex = charCount;
       }
     });
   }, [window]);
