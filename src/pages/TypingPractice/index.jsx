@@ -3,13 +3,9 @@ import TypingHeader from "./TypingHeader";
 
 const TypingPractice = () => {
   const [accuracy, setAccuracy] = useState(100);
-  const [wpm, setWpm] = useState(0);
   const [time, setTime] = useState(0);
   const [wordCount, setWordCount] = useState(0);
-  const [curKey, setCurKey] = useState("");
   const [wrongCharIndex, setWrongCharIndex] = useState([]);
-  const [start, setStart] = useState(false);
-
   const [paragraphs, setParagraphs] = useState(
     "The, at there  some my of be use her than and this an would first a have each make water"
   );
