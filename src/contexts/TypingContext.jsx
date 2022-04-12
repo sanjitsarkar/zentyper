@@ -216,9 +216,12 @@ const TypingProvider = ({ children }) => {
   const [wordCount, setWordCount] = useState(0);
   const [wrongCharIndex, setWrongCharIndex] = useState([]);
   const [isPaused, setIsPaused] = useState(true);
+  const [isRestarted, setIsRestarted] = useState(false);
   const [isBlur, setIsBlur] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const [wrongIndex, setWrongIndex] = useState(-1);
+  let _charCount = 0,
+    _wrongIndex = -1;
   const [paragraphs, setParagraphs] = useState(
     words
       .map((x) => ({ x, r: Math.random() }))
@@ -239,6 +242,7 @@ const TypingProvider = ({ children }) => {
         .slice(0, 50)
         .join(" ")
     );
+    setIsRestarted(() => true);
     setIsPaused(() => true);
     setTyped("");
     setTime(() => 0);
@@ -294,12 +298,17 @@ const TypingProvider = ({ children }) => {
   }, [wrongCharIndex, typed]);
 
   useEffect(() => {
-    let _charCount = charCount,
-      _wrongIndex = wrongIndex;
     window.addEventListener("keydown", (e) => {
+      console.log(paragraphs);
+      console.log(_charCount, _wrongIndex);
+      console.log(wrongCharIndex);
+      console.log(typed);
       pressKey(e);
       setIsBlur(() => false);
-      setIsPaused(() => false);
+      if (isPaused) {
+        setIsPaused(() => false);
+      }
+
       if (
         ((e.keyCode >= 48 && e.keyCode <= 90) ||
           e.keyCode === 32 ||
@@ -317,7 +326,7 @@ const TypingProvider = ({ children }) => {
         _wrongIndex = _charCount;
       }
     });
-  }, [window]);
+  }, [window, isRestarted]);
 
   useLayoutEffect(() => {
     window.addEventListener("blur", () => {
