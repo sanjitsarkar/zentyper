@@ -217,6 +217,8 @@ const TypingProvider = ({ children }) => {
   const [wrongCharIndex, setWrongCharIndex] = useState([]);
   const [isPaused, setIsPaused] = useState(true);
   const [isBlur, setIsBlur] = useState(false);
+  const [charCount, setCharCount] = useState(0);
+  const [wrongIndex, setWrongIndex] = useState(-1);
   const [paragraphs, setParagraphs] = useState(
     words
       .map((x) => ({ x, r: Math.random() }))
@@ -229,13 +231,23 @@ const TypingProvider = ({ children }) => {
   const [typed, setTyped] = useState("");
   const [timerInterval, setTimerInterval] = useState();
   const reStart = () => {
-    fetchWords();
+    setParagraphs(() =>
+      words
+        .map((x) => ({ x, r: Math.random() }))
+        .sort((a, b) => a.r - b.r)
+        .map((a) => a.x)
+        .slice(0, 50)
+        .join(" ")
+    );
+    setIsPaused(() => true);
     setTyped("");
-    setIsPaused(true);
-    setTime(0);
-    setWordCount(0);
-    setAccuracy(0);
+    setTime(() => 0);
+    setWordCount(() => 0);
+    setAccuracy(() => 0);
     setWrongCharIndex([]);
+    setCharCount(() => 0);
+    setWrongIndex(() => -1);
+    clearInterval(timerInterval);
   };
 
   const fetchWords = (n = 100) => {
@@ -248,9 +260,7 @@ const TypingProvider = ({ children }) => {
         .join(" ")
     );
   };
-  useEffect(() => {
-    return () => clearInterval(timerInterval);
-  }, []);
+
   useEffect(() => {
     if (!isPaused) {
       setTimerInterval(
@@ -284,28 +294,27 @@ const TypingProvider = ({ children }) => {
   }, [wrongCharIndex, typed]);
 
   useEffect(() => {
-    let charCount = 0,
-      wrongIndex = -1;
+    let _charCount = charCount,
+      _wrongIndex = wrongIndex;
     window.addEventListener("keydown", (e) => {
       pressKey(e);
       setIsBlur(() => false);
-
-      if (isPaused) setIsPaused(() => false);
+      setIsPaused(() => false);
       if (
         ((e.keyCode >= 48 && e.keyCode <= 90) ||
           e.keyCode === 32 ||
           (e.keyCode >= 186 && e.keyCode <= 222)) &&
-        e.key === paragraphs[charCount]
+        e.key === paragraphs[_charCount]
       ) {
         setTyped((_typed) => _typed + e.key);
-        charCount++;
+        _charCount++;
       } else if (e.keyCode !== 16 && e.keyCode !== 20) {
-        charCount !== wrongIndex &&
+        _charCount !== _wrongIndex &&
           setWrongCharIndex((_wrongCharIndex) => [
             ..._wrongCharIndex,
-            charCount,
+            _charCount,
           ]);
-        wrongIndex = charCount;
+        _wrongIndex = _charCount;
       }
     });
   }, [window]);
