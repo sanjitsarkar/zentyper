@@ -289,7 +289,7 @@ const TypingProvider = ({ children }) => {
     window.addEventListener("keydown", (e) => {
       pressKey(e);
       setIsBlur(() => false);
-      me;
+
       if (isPaused) setIsPaused(() => false);
       if (
         ((e.keyCode >= 48 && e.keyCode <= 90) ||
