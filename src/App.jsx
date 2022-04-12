@@ -1,14 +1,14 @@
-import { useState } from "react";
-import logo from "./logo.svg";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Keyboard from "./components/Keyboard";
+import HomePage from "./pages/HomePage";
 import TypingPractice from "./pages/TypingPractice";
 
 function App() {
   return (
-    <div className="App">
-      <TypingPractice />
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/practice" element={<TypingPractice />} />
+    </Routes>
   );
 }
 
