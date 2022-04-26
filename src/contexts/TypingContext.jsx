@@ -21,9 +21,12 @@ const TypingProvider = ({ children }) => {
   const [wrongIndex, setWrongIndex] = useState(-1);
   const timerRef = useRef();
   const [typed, setTyped] = useState("");
-  const [paragraphs, setParagraphs] = useState(genrateRandomParagraphs());
+  const [wordLength, setWordLength] = useState(50);
+  const [paragraphs, setParagraphs] = useState(
+    genrateRandomParagraphs(wordLength)
+  );
   const reStart = () => {
-    setParagraphs(genrateRandomParagraphs());
+    setParagraphs(genrateRandomParagraphs(wordLength));
     setIsPaused(true);
     setTyped("");
     setTime(0);
@@ -34,7 +37,9 @@ const TypingProvider = ({ children }) => {
     setWrongIndex(-1);
     clearInterval(timerRef.current);
   };
-
+  useEffect(() => {
+    genrateRandomParagraphs(wordLength);
+  }, [wordLength]);
   useEffect(() => {
     if (!isPaused) {
       timerRef.current = setInterval(() => {
@@ -53,7 +58,7 @@ const TypingProvider = ({ children }) => {
       setWordCount(wordCount + 1);
     }
     if (typed.length === paragraphs.length) {
-      clearInterval(timerRef.current);
+      reStart();
     }
   }, [typed]);
   useEffect(() => {

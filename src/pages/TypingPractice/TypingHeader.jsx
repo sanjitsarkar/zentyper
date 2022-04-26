@@ -18,10 +18,12 @@ const TypingHeader = () => {
     wrongCharIndex,
     reStart,
     setIsPaused,
+    setWordLength,
+    wordLength,
   } = useTyping();
 
   return (
-    <div className="flex flex-wrap  gap-2 row justify-between p-4 bg-slate-700 text-slate-100  text-lg items-center">
+    <div className="relative flex flex-wrap  gap-2 row justify-between p-4 bg-slate-700 text-slate-100  text-lg items-center">
       <div className="flex row gap-8">
         <h1>
           Accuracy: <span className="font-bold text-white ">{accuracy}%</span>
@@ -72,6 +74,20 @@ const TypingHeader = () => {
         <button>
           <FontAwesomeIcon icon={faEllipsisV} />
         </button>
+        {/* <ul className="bg-slate-800 text-white px-3 py-2 absolute top-20 right-2 flex col gap-2 shadow-2xl">
+          <li>
+            <span>Word Count</span>
+            <input
+              type="number"
+              min="10"
+              max="1000"
+              className="ml-3 w-14 px-2 py-0.25 outline-none border-0 rounded-sm bg-slate-200
+               text-slate-600"
+              defaultValue={wordLength}
+            />
+          </li>
+          <li></li>
+        </ul> */}
       </div>
     </div>
   );

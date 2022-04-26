@@ -201,7 +201,7 @@ const words = [
   "line",
 ];
 
-export const genrateRandomParagraphs = (n = 100) => {
+export const genrateRandomParagraphs = (n = 50) => {
   return words
     .map((x) => ({ x, r: Math.random() }))
     .sort((a, b) => a.r - b.r)
