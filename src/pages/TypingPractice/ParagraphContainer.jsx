@@ -2,9 +2,12 @@ import React from "react";
 import { useTyping } from "../../contexts/TypingContext";
 
 const ParagraphContainer = () => {
-  const { paragraphs, typed, wrongCharIndex } = useTyping();
+  const { paragraphs, typed, wrongCharIndex, timerRef } = useTyping();
   return (
-    <div className="py-10 px-5 text-xl text-slate-900 bg-slate-200 max-h-72 overflow-x-hidden overflow-y-auto font-mono ">
+    <div
+      ref={timerRef}
+      className="py-10 px-5 text-xl text-slate-900 bg-slate-200 max-h-72 overflow-x-hidden overflow-y-auto font-mono "
+    >
       {[...paragraphs].map((char, i) => {
         return (
           <span

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ClickToFocus from "../../components/ClickToFocus";
 import Keyboard from "../../components/Keyboard";
 import { useTyping } from "../../contexts/TypingContext";
@@ -7,8 +7,6 @@ import TypingHeader from "./TypingHeader";
 
 const TypingPractice = () => {
   const { isBlur } = useTyping();
-  const [show, setShow] = useState(isBlur);
-
   return (
     <div className="w-screen">
       {isBlur && <ClickToFocus />}
